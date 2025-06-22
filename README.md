@@ -17,7 +17,7 @@ as well as user-controlled velocity. Our sensor is a beacon at the center that t
 error within the dot's movement to better simulate realistic conditions that do not always act perfectly. 
 
 *Particle Filter*
-The particle filter is a special type of recursive filter that models the posterior with discrete spikes called particles in a Monte Carlo fashion. Each 
+The particle filter is a special type of recursive filter that attempts to model the posterior with discrete spikes called particles in a Monte Carlo fashion. Each 
 particle has an importance weight, which is just a fancy term for the probability of the system having the particular state of the particle. 
 We sample new particle states from the importance distribution that makes a best guess then provide corrections to the corresponding weight with a ratio between an evaluation
 of the posterior (or a function similar up to proportionality) over the importance density with the sampled particle and new sensor data as inputs. 
