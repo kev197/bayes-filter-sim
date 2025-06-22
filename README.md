@@ -46,7 +46,7 @@ degeneracy as many particles have a negligible impact on the pdf.
 
 We can choose to increase the number of particles at the cost of computational resources. This is with 10000 particles. 
 Within the constraints of this particular sim, ~150 particles seems to have the best computation-to-convergence-rate trade off,
-but in other applications the particle count may be increased further to reduce error. 
+but in other applications the particle count may be increased further to reduce error at the cost of efficiency.  
 
 
 This is a personal project made during Summer of 2025. 
