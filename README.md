@@ -17,6 +17,7 @@ as well as user controlled velocity. Our sensor is a beacon at the center that t
 error within the dot's movement to better simulate realistic conditions that do not always act perfectly. 
 
 <img src="https://github.com/user-attachments/assets/017e958b-6f67-4230-9afa-0b6751cc9370" alt="image" width="400"/>
+
 The particles are distributed uniformly across the screen. 
 
 
