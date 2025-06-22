@@ -12,8 +12,8 @@ class Agent:
         self.true_state = np.array([start_x, start_y], dtype=float)
         self.frame_rate = frame_rate
         # for ornstein-uhlenbeck process make global variables
-        self.ou_x = 0.0
-        self.ou_y = 0.0
+        self.ou_x = -4.0
+        self.ou_y = -4.0
         self.WIDTH = WIDTH
         self.HEIGHT = HEIGHT
 
@@ -27,7 +27,7 @@ class Agent:
         # ornstein-uhlenbeck process for "dead reckoning"
         ou_noise = random.gauss(0, 1)
         theta = 0.0001
-        sigma = 10.0
+        sigma = 20.0
         self.ou_x = -theta * self.ou_x * (1/(self.frame_rate)) + sigma * math.sqrt(1/(self.frame_rate)) * ou_noise
         self.ou_y = -theta * self.ou_y * (1/(self.frame_rate)) + sigma * math.sqrt(1/(self.frame_rate)) * ou_noise
         

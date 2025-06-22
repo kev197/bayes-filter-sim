@@ -73,4 +73,4 @@ class ParticleFilter:
     def estimate(self):
         x = sum(p.x for p in self.particles) / self.N_s
         y = sum(p.y for p in self.particles) / self.N_s
-        return x, y
+        return [x, y]
