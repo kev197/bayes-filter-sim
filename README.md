@@ -6,8 +6,8 @@ given the previous state (the properties of the system that we track) and new ob
 The goal of the recursive filter is at each time step to propagate the state at the previous time step through "system dynamics" (for example, velocity over
 time equations) to arrive at an estimated distribution of the system state called the prior, before modifying the prior with the latest observation 
 to attain a more promising prediction. This is the posterior of the system, given as a conditional distribution of the current system state given 
-the set of all observations up to time step k. By the discrete time step nature of the problem, the observation and states are random processes
-consisting of sets of random vectors indexed by time. The special property of these recursive systems is that we are recursively updating our state random vector at each time step k using the previous state and a new observation vector - 
+the set of all observations up to time step k. By the discrete time step nature of the problem, the observations and states are random processes
+consisting of sets of random vectors indexed by time. The special property of these recursive systems is that we are recursively generating the random vector denoting the state at each time step k using only the previous state and a new observation vector - 
 that is, we only need information of the previous time step and current data to arrive at the new result. Thus, it makes these algorithms a very efficient and elegant solution 
 to the state estimation problem. 
 In practice, the system can be anything like a moving line in the stock market or the properties of an economic system, 
