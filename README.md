@@ -13,7 +13,7 @@ to the state estimation problem.
 In practice, the system can be anything like a moving line in the stock market or the properties of an economic system, 
 but in this case it will be a moveable "dot" on the screen.
 The dot on the screen has a relatively simple state space and control input. Namely, the properties of the system we wish to track are its x and y coordinate pixels 
-as well as user controlled velocity. Our sensor is a beacon at the center that tracks distance to the dot, but with error. Furthermore, I have incorporated
+as well as user-controlled velocity. Our sensor is a beacon at the center that tracks distance to the dot, but with error. Furthermore, I have incorporated
 error within the dot's movement to better simulate realistic conditions that do not always act perfectly. 
 
 *Particle Filter*
