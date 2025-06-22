@@ -210,7 +210,7 @@ while running:
         # approximate effective sample size. 
         # if it drops below a threshold N_t as degeneracy is high
         N_eff_hat = 1 / sum_sq_weights
-        N_T = N_s // 1
+        N_T = N_s 
         if N_eff_hat < N_T:
             # systematic resampling as detailed by Arulampalam et al. (2002)
             cdf = [particles[0].weight]
