@@ -7,10 +7,10 @@ The goal of the recursive filter is at each time step to propagate the state at 
 time equations) to arrive at an estimated distribution of the system state called the prior, before modifying the prior with the latest observation 
 to attain a more promising prediction. This is the posterior of the system, given as a conditional distribution of the current system state given 
 the set of all observations up to time step k. By the discrete time step nature of the problem, the observation and states are random processes
-consisting of sets of random vectors indexed by time. The special property of these recursive systems is that we are recursively updating our prediction - 
-that is, we only need information of the previous time step to arrive at the new result. Thus, it makes these algorithms a very efficient and elegant solution 
+consisting of sets of random vectors indexed by time. The special property of these recursive systems is that we are recursively updating our state random vector at each time step k using the previous state and a new observation vector - 
+that is, we only need information of the previous time step and current data to arrive at the new result. Thus, it makes these algorithms a very efficient and elegant solution 
 to the state estimation problem. 
-In pracitce, the system can be anything like a moving line in the stock market or the properties of an economic system, 
+In practice, the system can be anything like a moving line in the stock market or the properties of an economic system, 
 but in this case it will be a moveable "dot" on the screen.
 The dot on the screen has a relatively simple state space and control input. Namely, the properties of the system we wish to track are its x and y coordinate pixels 
 as well as user controlled velocity. Our sensor is a beacon at the center that tracks distance to the dot, but with error. Furthermore, I have incorporated
