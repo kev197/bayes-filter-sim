@@ -1,5 +1,5 @@
 Hello! This is a project I made that models various recursive filters in a discrete time approach (extended kalman filter, SIS filter, approximated grid-based approach) within a 2d sim.
-The goal is the model the position of a dot on the screen who's true location is known with "uncertainty" (assuming a robotics application this 
+The goal is to model the position of a dot on the screen who's true location is known with "uncertainty" (assuming a robotics application this 
 would be stuff like noise in the sensor data, inaccuracies in the hardware, wheel slippage ...). 
 The problem arises of estimating the state at a certain discrete time step
 given the previous state (the properties of the system that we track) and new observations (sensors, external sources of observation). 
