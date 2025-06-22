@@ -16,7 +16,7 @@ The dot on the screen has a relatively simple state space and control input. Nam
 as well as user controlled velocity. Our sensor is a beacon at the center that tracks distance to the dot, but with error. Furthermore, I have incorporated
 error within the dot's movement to better simulate realistic conditions that do not always act perfectly. 
 
-![image](https://github.com/user-attachments/assets/017e958b-6f67-4230-9afa-0b6751cc9370)
+<img src="https://github.com/user-attachments/assets/017e958b-6f67-4230-9afa-0b6751cc9370" alt="image" width="400"/>
 The particles are distributed uniformly across the screen. 
 
 
