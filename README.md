@@ -27,19 +27,23 @@ of the posterior and importance at the current density with the sampled particle
 The particles are distributed uniformly across the screen. 
 
 <img src="https://github.com/user-attachments/assets/8662d259-0744-4585-8086-7bfcdd2b841e" alt="image" width="400"/>
+
 In an instant, the likelihood function adjust the weights of particles and the resampling process (I use systematic sampling) 
 causes the particles to "respawn" around these high density regions. Notice that the particles form a circle around the beacon, 
 expected behavior as the beacon only gives distance to the dot, but not the orientation of the distance. 
 
 <img src="https://github.com/user-attachments/assets/e7d1fd58-81fd-44c2-a9bb-ef1e1138de4b" alt="image" width="400"/>
+
 Finally, the beauty of the particle filter is shown in full effect when the user makes an input. 
 
 <img src="https://github.com/user-attachments/assets/3126c4f3-ee85-48fe-bfeb-4ceee12edc17" alt="image" width="400"/>
+
 The preceding examples resample at every time step, but we can choose to resample only after the effective sample size metric 
 falls below a certain threshold. I visualized higher probability particles as being larger. Notice that this leads to some
 degeneracy as many particles have a negligible impact on the pdf. 
 
 <img src="https://github.com/user-attachments/assets/c146da04-b008-4c4a-99ad-b35fec934075" alt="image" width="400"/>
+
 We can choose to increase the number of particles at the cost of computational resources. This is with 10000 particles. 
 Within the constraints of this particular sim, ~150 particles seems to have the best computation-to-convergence-rate trade off,
 but in other applications the particle count may be increased further to reduce error. 
