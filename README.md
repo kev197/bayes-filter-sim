@@ -34,7 +34,7 @@ expected behavior as the beacon only gives distance to the dot, but not the orie
 
 <img src="https://github.com/user-attachments/assets/e7d1fd58-81fd-44c2-a9bb-ef1e1138de4b" alt="image" width="400"/>
 
-Finally, the beauty of the particle filter is shown in full effect when the user makes an input. 
+Finally, the beauty of the particle filter is shown in full effect when the user makes some inputs. 
 
 <img src="https://github.com/user-attachments/assets/3126c4f3-ee85-48fe-bfeb-4ceee12edc17" alt="image" width="400"/>
 
