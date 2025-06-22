@@ -19,8 +19,8 @@ error within the dot's movement to better simulate realistic conditions that do 
 *Particle Filter*
 The particle filter is a special type of recursive filter that models the posterior with discrete spikes called particles. Each 
 particle has an importance weight, which is just a fancy term for the probability of the system having the particular state of the particle. 
-We sample new particle states from an importance distribution and provide a correction to the existing weight with a ratio between evaluations
-of the posterior and importance at the current density with the sampled particle and new sensor data as inputs. 
+We sample new particle states from the importance distribution that makes a prediction and provide a correction to the existing weight with a ratio between evaluations
+of the posterior and importance density with the sampled particle and new sensor data as inputs. 
 
 <img src="https://github.com/user-attachments/assets/017e958b-6f67-4230-9afa-0b6751cc9370" alt="image" width="400"/>
 
