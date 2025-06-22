@@ -45,7 +45,8 @@ degeneracy as many particles have a negligible impact on the pdf.
 <img src="https://github.com/user-attachments/assets/c146da04-b008-4c4a-99ad-b35fec934075" alt="image" width="400"/>
 
 We can choose to increase the number of particles at the cost of computational resources. This is with 10000 particles. 
-Within the constraints of this particular sim, ~150 particles seems to have the best computation-to-convergence-rate trade off,
+Within the constraints of this particular sim, ~150 particles seems to have the best computation-to-convergence-rate trade off as due to the 
+Monte Carlo nature of the algorithm we need some particles to land on the dot,
 but in other applications the particle count may be increased further to reduce error at the cost of efficiency.  
 
 
