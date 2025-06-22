@@ -30,9 +30,9 @@ dot_radius = 10
 frame_rate = 60
 # run at 20 hz, 50ms time steps
 filter_interval = 50
-N_s = 1000
+N_s = 150
 sensor_noise = 25.0
-speed = 10
+speed = 8
 
 # Initialize world, agent, filter
 world = World(WIDTH, HEIGHT)
@@ -71,7 +71,7 @@ while running:
         pf.predict(mu, dt)
         pf.update(z_k, world.beacon_pos, sensor_std=sensor_noise)
         # We resample if it drops below a threshold N_T as degeneracy is high
-        N_T = N_s
+        N_T = N_s // 3
         if pf.effective_sample_size() < N_T:
             pf.resample()
         x_est, y_est = pf.estimate()
