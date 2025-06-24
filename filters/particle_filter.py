@@ -12,31 +12,40 @@ class Particle:
 class ParticleFilter:
     def __init__(self, N_s, width, height):
         self.N_s = N_s
-        self.particles = [Particle(random.uniform(0, width), random.uniform(0, height), weight=1.0 / N_s) for _ in range(N_s)]
+        # self.particles = [Particle(random.uniform(0, width), random.uniform(0, height), weight=1.0 / N_s) for _ in range(N_s)]
+
+        # or, we could spread uniformly around the true start position. this will cause faster convergence of the particles
+        # mitigating error at the start. 
+        deviation = 200
+        self.particles = [Particle(random.uniform(700 - deviation, 700 + deviation), random.uniform(250 - deviation, 250 + deviation), weight=1.0 / N_s) for _ in range(N_s)]
 
     def predict(self, mu, dt):
         # I need to come up with an importance density. 
         # I will use the prior for this task (bootstrap filter). 
         for p in self.particles:
-            motion_uncertainty_predict = random.betavariate(6, 3)
+            motion_uncertainty_predict = random.betavariate(10, 3)
             angle = random.uniform(0, 2 * math.pi)
-            r = random.gauss(0.0, 8.0)
+            r = random.gauss(0.0, 15.0)
             # x = x_0 + v_x*dt + noise
             # y = y_0 + v_y*dt + noise
             p.x += (mu[0] * motion_uncertainty_predict) * dt + r * math.cos(angle)
             p.y += (mu[1] * motion_uncertainty_predict) * dt + r * math.sin(angle)
 
-    def update(self, z_k, beacon_pos, sensor_std=25.0):
+    def update(self, z_k, beacon_positions, sensor_std):
         sum_weights = 0.0
         for p in self.particles:
             # update weight for each particle recursively
-            z_hat = math.hypot(p.x - beacon_pos[0], p.y - beacon_pos[1])
-            error = z_hat - z_k
+            for z_k_i, beacon_pos in zip(z_k, beacon_positions):
+                dx = p.x - beacon_pos[0]
+                dy = p.y - beacon_pos[1]
+                dist = np.sqrt(dx**2 + dy**2)
 
-            coeff = 1.0 / (math.sqrt(2 * math.pi) * sensor_std)
-            exponent = - (error ** 2) / (2 * sensor_std ** 2)
-            likelihood = coeff * math.exp(exponent)
-            p.weight *= likelihood
+                error = z_k_i - dist
+                coeff = 1.0 / (np.sqrt(2 * np.pi) * sensor_std)
+                exponent = - (error ** 2) / (2 * sensor_std ** 2)
+                likelihood = coeff * np.exp(exponent)
+
+                p.weight *= likelihood  # assuming independence
 
             sum_weights += p.weight
 
@@ -70,7 +79,7 @@ class ParticleFilter:
         sum_sq_weights = sum(p.weight ** 2 for p in self.particles)
         return 1.0 / sum_sq_weights
 
-    def estimate(self):
+    def get_estimated_state(self):
         x = sum(p.x for p in self.particles) / self.N_s
         y = sum(p.y for p in self.particles) / self.N_s
-        return [x, y]
+        return np.array([x, y])

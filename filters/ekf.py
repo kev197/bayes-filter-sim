@@ -3,16 +3,17 @@ import random
 import numpy as np
 
 class EKF:
-    def __init__(self, initial_state, initial_covariance, beacon_pos, sensor_noise):
+    def __init__(self, initial_state, initial_covariance, beacon_positions, sensor_noise):
         self.state = initial_state
         self.covariance = initial_covariance
-        self.beacon_pos = beacon_pos
+        self.beacon_positions = beacon_positions
         self.sensor_noise = sensor_noise
 
     def predict(self, mu, dt):
         # x = x_0 + v_x*dt + noise
         # y = y_0 + v_y*dt + noise
-        mu = mu * 0.8
+        alpha = 0.75
+        mu = mu * alpha
         self.state[0] += mu[0] * dt
         self.state[1] += mu[1] * dt
 
@@ -29,24 +30,38 @@ class EKF:
         F = np.eye(2)
         self.covariance = Q + F @ self.covariance @ F.T
 
+    def h(self, x, beacon_positions):
+        return np.array([
+            np.sqrt((x[0] - bx)**2 + (x[1] - by)**2)
+            for (bx, by) in beacon_positions
+        ])
+    
+    def compute_jacobian(self, x, beacon_positions):
+        H = []
+        for (bx, by) in beacon_positions:
+            dx = x[0] - bx
+            dy = x[1] - by
+            dist = np.sqrt(dx**2 + dy**2)
+            if dist == 0:
+                H.append([0, 0])
+            else:
+                H.append([dx / dist, dy / dist])
+        return np.array(H)  # Shape: (num_beacons, 2)
+
     def update(self, z_k):
         # since the observation model is nonlinear in this case (square root)
         # we must take the jacobian of the observation model evaluated at the 
         # predicted state. this gives us the first order taylor approximation 
         # of the observation locally, which is a linear function
         # that can be propagated through the normal KF update.
-        dx = self.state[0] - self.beacon_pos[0]
-        dy = self.state[1] - self.beacon_pos[1]
-        dist = np.sqrt(dx**2 + dy**2)
-        H = None
-        if dist == 0:
-            H = np.zeroes((1, 2))
-        else:
-            H = np.array([[dx / dist, dy / dist]])
-        R = np.array([[self.sensor_noise]])
+        z_hat_k = self.h(self.state, self.beacon_positions)
+        H = self.compute_jacobian(self.state, self.beacon_positions)
+
+        R = np.eye(len(self.beacon_positions)) * self.sensor_noise**2
+
         S = H @ self.covariance @ H.T + R
         K = self.covariance @ H.T @ np.linalg.inv(S)
-        self.state = self.state + K @ (z_k - np.array([dist]))
+        self.state = self.state + K @ (z_k - z_hat_k)
 
         # bayesian fusion principles tells us that the generated gaussian has 
         # less covariance than the original gaussians (the prior and likelihood). 
