@@ -92,7 +92,7 @@ When the time step exceeds a given threshold T the program terminates and displa
 
 <img src="https://github.com/user-attachments/assets/f51a4f61-eae3-4796-a1d6-78f64bea318e" alt="image" width="400"/>
 
-T = 500, resampling particles at N_s / 2, grid resolution 12px
+T = 500, resampling particles at ~50% effective particles, 12px grid resolution, non-manual control
 
 
 This is a personal project made during Summer of 2025 developed by me, a rising sophomore studying computer science and mathematics at Rutgers University.
