@@ -77,7 +77,7 @@ Finally, the beauty of the particle filter is shown in full effect when the user
 <img src="https://github.com/user-attachments/assets/3126c4f3-ee85-48fe-bfeb-4ceee12edc17" alt="image" width="400"/>
 
 The preceding examples resample at every time step, but we can choose to resample only after the effective sample size metric 
-falls below a certain threshold. Then, because the particles are no longer i.i.d. at every time step the weights should not be set all the same as before, at least until they are resampled again. I visualized higher probability particles as being larger. Notice that this leads to some
+falls below a certain threshold. Then, because the particle states are no longer i.i.d. the weights should not be set all the same as before, at least until they are resampled again. I visualized higher probability particles as being larger. Notice that this leads to some
 degeneracy as many particles have a negligible impact on the pdf. 
 
 <img src="https://github.com/user-attachments/assets/c146da04-b008-4c4a-99ad-b35fec934075" alt="image" width="400"/>
