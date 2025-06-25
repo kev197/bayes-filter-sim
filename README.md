@@ -32,16 +32,28 @@ to the state estimation problem.
 ### Extended Kalman Filter
 The extended kalman filter is a generalization of the kalman filter algorithm to nonlinear state transition and observation models. However, we maintain the assumptions of gaussianity, so the only real benefit is being able to generalize KF to more models. At each time step the extended kalman filter maintains a "best guess" mean and a covariance that delineates a "cloud" of uncertainty around that mean. We can think of it like a normal distribution but generalized to the multidimensional state space, where we hope to "capture" the true state within this multidimensional cloud of certainty. The methods we use to propagate this mean and uncertainty around that mean is more complex, making use of linear algebra and vector calculus topics. In essence, we are propagating the previous posterior's gaussian through the mechanics of bayesian fusion and add dictate the amount of "fusion" with the Kalman Control, a formula that uses mappings between spaces to compute a relative confidence in what the sensors are telling us. Actually, everything I've stated prior to this is basically just Kalman Filter, the main difference in the "extended" variation is that we derive a first order taylor approximation of the nonlinear models by calculating the jacobian at the prior. This allows us to run the kalman filter updates without changing any formulas. 
 
+<img src="https://github.com/user-attachments/assets/0854ac74-3db7-452f-a84d-316f9633de64" alt="image" width="400"/>
+
+The blue dot is the mean of the gaussian posterior predicted by the EKF. The transparent ellipse is a 2 SD confidence interval dictated by the covariance of the posterior. 
+
+<img src="https://github.com/user-attachments/assets/bb524eff-ef52-49ab-a944-9b255719b790" alt="image" width="400"/>
+
+As expected, increasing the number of sensors increases the precision of the posterior and the accuracy in general. This is the core of bayesian fusion; When we have multiple distributions "agreeing" on a certain point, the uncertainty of the new distribution dramatically decreases. 
+
+
 ### Grid Filter
 The grid based filter solves the problem of tractability, meaning feasability to compute, of the theoretical recursive filter. For example, the Chapman-Kolmogorov equation is the idealized way to calculate the prior distribution given the observation and state at the previous time step. However, because this equation takes an integral, we say that is intractable and thus we must compute something "like" that equation, or at least follow the general principles of the optimal filter when pushing along new posteriors. The grid filter basically says rather than taking an integral over all the possible states, which is practically infeasible with continuous values as is usually the case in real applications, let's discretize the state space into a finite set of states and perform the Chapman-Kolmogorov but as a sum over these states. Specified to this simulation, that means taking the state space (which is just x and y pixel coordinates) and chunking it up into discrete, finite cells. Then, we can perform the exact recursive filter updates on the "center" of each state. Of course, this comes with a few problems: The division of the state space must be sufficiently "dense" to model its continuous nature, but clearly in nontrivial cases this comes at tremendous computational cost. This is because in complex problems (high dimensional state spaces, dense representations of the state space) the computation required grows exponentially. For example, the generalized Chapman-Kolmogorov equation to sums takes an overall "flow" into each state from every other state. This means iterating through every state, then deriving a probability of entering that state from every other state. In this simulation this means iterating through all n^2 grid cells and within each iteration iterating through n^2 grid cells, a terrible time complexity of n^4. In fact, when making this simulation it would not even function with cells of size 50px (for reference, the width of the simulation is 1200px) and external optimizations were necessary for the grid filter to even be useable (numba optimizations). Hence, this mode of filtering should only be used for very simple applications or teaching purposes. For practical usage other methods should be used. 
 
 <img src="https://github.com/user-attachments/assets/0309651a-20cb-4812-8d8c-9797610e2785" alt="image" width="400"/>
+
 Upon start of simulation, the weights converge to the cells that maximize likelihood i.e. where the beacon says the system could be at. Because its a distance sensor and does not track orientation, a circle is expected. Note that I initialize the cells as a gaussian about the true start position, which explains the uneveness in the circle. 
 
 <img src="https://github.com/user-attachments/assets/3ebfe70c-2551-492a-a131-eb067151a640" alt="image" width="400"/>
+
 As expected, upon movement the prediction refines and the distribution converges around the true position. 
 
 <img src="https://github.com/user-attachments/assets/f9272784-f16f-4b31-aae4-7ae03becb040" alt="image" width="400"/>
+
 We can also choose to refine the size of how we divide the state space, i.e. increasing the grid's resolution, at the cost of computational effort. 
 
 
@@ -82,8 +94,9 @@ but in other applications the particle count may be increased further to reduce 
 
 When the time step k attains a threshold T the program terminates and displays a matplotlib plot. The metric I use is RMSE (Root Mean Squared Error). To calculate this I let the true position of the dot be the actual state and use methods to determine an overall "average" position of the various filters. For EKF, I just used the mean. For the PF, I take the expected x and y across all particles. For the GF, I take the expected x and y across the centers of all grid cells. 
 
-<img src="https://github.com/user-attachments/assets/8b81b1c1-d59c-43f8-91d0-6b4a921c5c4c" alt="image" width="400"/>
+<img src="https://github.com/user-attachments/assets/f51a4f61-eae3-4796-a1d6-78f64bea318e" alt="image" width="400"/>
 
+T = 500, resampling particles at N_s / 2, grid resolution 12px
 
 
 This is a personal project made during Summer of 2025 developed by me, a rising sophomore studying computer science and mathematics at Rutgers University.
