@@ -94,8 +94,9 @@ When the time step exceeds a given threshold T the program terminates and displa
 
 T = 500, resampling particles at ~50% effective particles, 12px grid resolution, non-manual control
 
+### About This Project
 
 This is a personal project made during Summer of 2025 developed by me, a rising sophomore studying computer science and mathematics at Rutgers University.
 
-References
+### References
 - Arulampalam, M. S., Maskell, S., Gordon, N., & Clapp, T. (2002). A tutorial on particle filters for online nonlinear/non-Gaussian Bayesian tracking. IEEE Transactions on Signal Processing, 50(2), 174–188.
