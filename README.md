@@ -1,4 +1,8 @@
+## Bayesian Filter Simulator
+
 Hello! This is a project I made that models various recursive filters in a discrete time approach (extended kalman filter, SIS filter, approximated grid-based approach) within a 2d sim.
+
+# Problem Statement
 The goal is to model the position of a dot on the screen who's true location is known with "uncertainty" (assuming a robotics application this 
 would be stuff like noise in the sensor data, inaccuracies in the hardware, wheel slippage ...). 
 The problem arises of estimating the state at a certain discrete time step
@@ -10,12 +14,22 @@ the set of all observations up to time step k. By the discrete time step nature 
 consisting of sets of random vectors indexed by time. The special property of these recursive systems is that we are recursively generating the random vector denoting the state at each time step k using only the previous state and a new observation vector - 
 that is, we only need information of the previous time step and current data to arrive at the new result. Thus, it makes these algorithms a very efficient and elegant solution 
 to the state estimation problem. 
-In practice, the system can be anything like a moving line in the stock market or the properties of an economic system, 
-but in this case it will be a moveable "dot" on the screen.
-The dot on the screen has a relatively simple state space and control input. Namely, the properties of the system we wish to track are its x and y coordinate pixels 
-as well as user-controlled velocity. Our sensor is a beacon at the center that tracks distance to the dot, but with error. Furthermore, I have incorporated
-error within the dot's movement to better simulate realistic conditions that do not always act perfectly. 
 
+# Project Structure and Key Concepts
+- State Space: 2 dimensional, describes relative x and y pixel coordinates from origin at top left of screen [x y]
+- Control Input: 2 dimensional, describes the velocity input by the user [vx, vy]
+- Sensor Space: x dimensions, describes distance of xth sensor to true position
+- System Dynamics: The initial state plus the velocity input over change in time. Extra noise is injected to better model real scenarios.
+- Filters:
+  - Extended Kalman Filter
+      - Applies Kalman Filter methods to the nonlinear observation model, which is a square root function
+  - Particle Filter
+      - Prior as the importance distribution
+      - Systematically resample
+      - Monte Carlo method for determining the state
+  - Approximated Grid-Based Filter
+      - Approximates the continuous state space as a discretized finite set of states, then applies the true bayesian update rules
+      - 
 *Particle Filter*
 The particle filter is a special type of recursive filter that attempts to model the posterior with discrete spikes called particles in a Monte Carlo fashion. Each 
 particle has an importance weight, which is just a fancy term for the probability of the system having the particular state of the particle. 
