@@ -18,7 +18,7 @@ to the state estimation problem.
 - Control Input: 2 dimensional, describes the velocity input by the user [v_x, v_y]
 - Sensor Space: x dimensions, describes distance of xth sensor to true position [d_1, d_2, ..., d_x] 
 - System Dynamics: The initial state plus the velocity input over change in time. Extra noise is injected to better model real scenarios.
-- Sensors: Beacons (blue dots in sim) track the distance to the true system position, with added uncertainty
+- Sensors: Beacons (blue dots in sim) track distance to the true system position, with added uncertainty
 - Filters:
   - Extended Kalman Filter
       - Applies Kalman Filter methods to the nonlinear observation model, which is a square root function
