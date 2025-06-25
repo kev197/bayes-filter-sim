@@ -1,8 +1,8 @@
-## Bayesian Filter Simulator
+# Bayesian Filter Simulator
 
 Hello! This is a project I made that models various recursive filters in a discrete time approach (extended kalman filter, SIS filter, approximated grid-based approach) within a 2d sim.
 
-# Problem Statement
+## Problem Statement
 The goal is to model the position of a dot on the screen who's true location is known with "uncertainty" (assuming a robotics application this 
 would be stuff like noise in the sensor data, inaccuracies in the hardware, wheel slippage ...). 
 The problem arises of estimating the state at a certain discrete time step
@@ -15,7 +15,7 @@ consisting of sets of random vectors indexed by time. The special property of th
 that is, we only need information of the previous time step and current data to arrive at the new result. Thus, it makes these algorithms a very efficient and elegant solution 
 to the state estimation problem. 
 
-# Project Structure and Key Concepts
+## Project Structure and Key Concepts
 - State Space: 2 dimensional, describes relative x and y pixel coordinates from origin at top left of screen [x y]
 - Control Input: 2 dimensional, describes the velocity input by the user [vx, vy]
 - Sensor Space: x dimensions, describes distance of xth sensor to true position
@@ -30,7 +30,7 @@ to the state estimation problem.
   - Approximated Grid-Based Filter
       - Approximates the continuous state space as a discretized finite set of states, then applies the true bayesian update rules
       - 
-*Particle Filter*
+### Particle Filter
 The particle filter is a special type of recursive filter that attempts to model the posterior with discrete spikes called particles in a Monte Carlo fashion. Each 
 particle has an importance weight, which is just a fancy term for the probability of the system having the particular state of the particle. 
 We sample new particle states from the importance distribution that makes a best guess then provide corrections to the corresponding weight with a ratio between an evaluation
@@ -62,8 +62,15 @@ We can choose to increase the number of particles at the cost of computational r
 Within the constraints of this particular sim, ~150 particles seems to have the best computation-to-convergence-rate trade off,
 but in other applications the particle count may be increased further to reduce error at the cost of efficiency.  
 
+## Performance Metrics
 
-This is a personal project made during Summer of 2025. 
+When the time step k attains a threshold T the program terminates and displays a matplotlib plot. The metric I use is RMSE (Root Mean Squared Error). To calculate this I let the true position of the dot be the actual state and use methods to determine an overall "average" position of the various filters. For EKF, I just used the mean. For the PF, I take the expected x and y across all particles. For the GF, I take the expected x and y across the centers of all grid cells. 
+
+<img src="https://github.com/user-attachments/assets/8b81b1c1-d59c-43f8-91d0-6b4a921c5c4c" alt="image" width="400"/>
+
+
+
+This is a personal project made during Summer of 2025 developed by me, a rising sophomore studying computer science and mathematics at Rutgers University. 
 
 References
 - Arulampalam, M. S., Maskell, S., Gordon, N., & Clapp, T. (2002). A tutorial on particle filters for online nonlinear/non-Gaussian Bayesian tracking. IEEE Transactions on Signal Processing, 50(2), 174–188.
