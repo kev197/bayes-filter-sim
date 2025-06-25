@@ -16,7 +16,7 @@ to the state estimation problem.
 ## Project Structure and Key Concepts
 - State Space: 2 dimensional, describes relative x and y pixel coordinates from origin at top left of screen [x y]
 - Control Input: 2 dimensional, describes the velocity input by the user [vx, vy]
-- Sensor Space: x dimensions, describes distance of xth sensor to true position
+- Sensor Space: x dimensions, describes distance of xth sensor to true position [d_1, d_2, ..., d_x] 
 - System Dynamics: The initial state plus the velocity input over change in time. Extra noise is injected to better model real scenarios.
 - Filters:
   - Extended Kalman Filter
