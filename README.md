@@ -1,6 +1,6 @@
 # Bayesian Filter Simulator
 
-Hello! This is a project I made that models various recursive filters in a discrete time approach (extended kalman filter, SIS filter, approximated grid-based approach) within a 2d sim.
+Hello! This is a project I made that models various recursive filters in a discrete time approach (extended kalman filter, SIS filter, approximated grid-based approach) within a 2d sim. 
 
 ## Problem Statement
 The goal is to model the position of a dot on the screen who's true location is known with "uncertainty" (assuming a robotics application this 
@@ -21,13 +21,19 @@ to the state estimation problem.
 - Filters:
   - Extended Kalman Filter
       - Applies Kalman Filter methods to the nonlinear observation model, which is a square root function
+      - Compute bayesian fusion and generate a noise-dependent confidence scaling using linear algebra machinery 
   - Particle Filter
       - Prior as the importance distribution
-      - Systematically resample
+      - Systematically resample 
       - Monte Carlo method for determining the state
   - Approximated Grid-Based Filter
-      - Approximates the continuous state space as a discretized finite set of states, then applies the true bayesian update rules
-      - 
+      - Approximate (somewhat) continuous pixel values as a discretized finite set of states, then apply the optimal bayesian update rules
+   
+### Extended Kalman Filter
+The extended kalman filter is a generalization of the kalman filter algorithm to nonlinear state transition and observation models. However, we maintain the assumptions of gaussianity, so the only real benefit is being able to apply the kalman filter to more complex systems. At each time step the extended kalman filter maintains a "best guess" mean and a covariance that delineates a "cloud" of uncertainty around that mean. We can think of it like a normal distribution but generalized to the multidimensional state space, where we hope to "capture" the true state within this multidimensional cloud of certainty. The methods we use to propagate this mean and uncertainty around that mean is more complex, making use of linear algebra and vector calculus topics. In essence, we are propagating the previous posterior's gaussian through the mechanics of bayesian fusion and add dictate the amount of "fusion" with the Kalman Control, a formula that uses mappings between spaces to compute a relative confidence in what the sensors are telling us. 
+
+
+
 ### Particle Filter
 The particle filter is a special type of recursive filter that attempts to model the posterior with discrete spikes called particles in a Monte Carlo fashion. Each 
 particle has an importance weight, which is just a fancy term for the probability of the system having the particular state of the particle. 
@@ -68,7 +74,7 @@ When the time step k attains a threshold T the program terminates and displays a
 
 
 
-This is a personal project made during Summer of 2025 developed by me, a rising sophomore studying computer science and mathematics at Rutgers University. 
+This is a personal project made during Summer of 2025 developed by me, a rising sophomore studying computer science and mathematics at Rutgers University.
 
 References
 - Arulampalam, M. S., Maskell, S., Gordon, N., & Clapp, T. (2002). A tutorial on particle filters for online nonlinear/non-Gaussian Bayesian tracking. IEEE Transactions on Signal Processing, 50(2), 174–188.
