@@ -24,9 +24,8 @@ to the state estimation problem.
       - Applies Kalman Filter methods to the nonlinear observation model, which is a square root function
       - Compute bayesian fusion and generate a noise-dependent confidence scaling using linear algebra machinery 
   - Particle Filter
-      - Prior as the importance distribution
-      - Systematically resample 
-      - Monte Carlo method for determining the state
+      - Motion model as the importance distribution (prior proposal)
+      - Systematically resample upon approximated effective sample size reaching a certain threshold
   - Approximated Grid-Based Filter
       - Approximate (more or less) continuous pixel values as a discretized finite set of states, then apply the optimal bayesian update rules
    
