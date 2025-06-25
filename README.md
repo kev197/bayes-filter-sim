@@ -90,7 +90,7 @@ When the time step exceeds a given threshold T the program terminates and displa
 
 <img src="https://github.com/user-attachments/assets/f51a4f61-eae3-4796-a1d6-78f64bea318e" alt="image" width="400"/>
 
-T = 500, resampling particles at ~50% effective particles, 12px grid resolution, non-manual control, 2 beacons
+T = 500, resample at ~50% effective particles, 12px grid resolution, non-manual control, 2 beacons
 
 ### About This Project
 
