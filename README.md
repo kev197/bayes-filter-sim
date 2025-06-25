@@ -46,7 +46,7 @@ The grid based filter solves the problem of tractability, meaning feasability to
 
 <img src="https://github.com/user-attachments/assets/0309651a-20cb-4812-8d8c-9797610e2785" alt="image" width="400"/>
 
-Upon start of simulation, the weights converge to the cells that maximize likelihood i.e. where the beacon says the system could be at. Because its a distance sensor and does not track orientation, a circle is expected. Note that I initialize the cells as a gaussian about the true start position, which explains the uneveness in the circle. 
+Upon start of simulation, the weights converge to the cells that maximize likelihood, i.e. where the beacon says the system could be at. Because its a distance sensor and does not track orientation, a circle is expected. Note that I initialize the cells as a gaussian about the true start position, which explains the uneveness in the circle. 
 
 <img src="https://github.com/user-attachments/assets/3ebfe70c-2551-492a-a131-eb067151a640" alt="image" width="400"/>
 
