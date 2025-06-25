@@ -5,7 +5,7 @@ from numba import njit
 # use numba speed up because of high computational load of grid based filter. 
 
 @njit
-def compute_prior(curr_x, curr_y, flow_x, flow_y, mu_x, mu_y, dt, sigma=10.0, alpha=0.67):
+def compute_prior(curr_x, curr_y, flow_x, flow_y, mu_x, mu_y, dt, sigma=12, alpha=1.3):
     expected_x = flow_x + alpha * mu_x * dt
     expected_y = flow_y + alpha * mu_y * dt
     dx = curr_x - expected_x
@@ -14,32 +14,6 @@ def compute_prior(curr_x, curr_y, flow_x, flow_y, mu_x, mu_y, dt, sigma=10.0, al
     coeff = 1.0 / (2 * np.pi * sigma**2)
     exponent = -dist_squared / (2 * sigma**2)
     return coeff * np.exp(exponent)
-
-# @njit
-# def compute_prior(curr_x, curr_y, flow_x, flow_y, mu_x, mu_y, dt, a=6.0, b=3.0):
-#     dx = curr_x - flow_x
-#     dy = curr_y - flow_y
-
-#     disp = (dx**2 + dy**2)**0.5
-#     motion_mag = (mu_x**2 + mu_y**2)**0.5 * dt
-
-#     if motion_mag == 0:
-#         return 1.0 if disp == 0 else 0.0
-
-#     s = disp / motion_mag
-
-#     if s < 0 or s > 1:
-#         return 0.0
-
-#     # Compute beta.pdf(s; a, b) manually
-#     # Beta(s; a, b) = s**(a - 1) * (1 - s)**(b - 1) / B(a, b)
-#     # where B(a, b) = gamma(a) * gamma(b) / gamma(a + b)
-
-#     # Use precomputed values for B(6, 3) ≈ 0.00952381
-#     # or manually use approximation via math.gamma
-#     beta_norm = 0.00952381
-#     numerator = s**(a - 1) * (1 - s)**(b - 1)
-#     return numerator / beta_norm
 
 @njit
 def estimate_jit(weights, centers):
@@ -59,7 +33,9 @@ def predict_jit(weights, centers, mu, dt, res):
     new_weights = np.zeros_like(weights)
     mu_x, mu_y = mu
     motion_magnitude = (mu_x**2 + mu_y**2)**0.5
-    motion_radius = int(motion_magnitude * dt / res) + 1
+    motion_radius = int(motion_magnitude * dt / res) + 3
+
+    sum = 0
 
     for i in range(grid_height):
         for j in range(grid_width):
@@ -75,7 +51,8 @@ def predict_jit(weights, centers, mu, dt, res):
                         prior = compute_prior(curr_x, curr_y, flow_x, flow_y, mu_x, mu_y, dt)
                         total_flow += weight * prior
             new_weights[i, j] = total_flow
-    return new_weights
+            sum += new_weights[i, j]
+    return new_weights / sum
 
 class AGF:
     def __init__(self, WIDTH, HEIGHT, resolution, start_pos):
@@ -102,24 +79,6 @@ class AGF:
                 dist_squared = dx**2 + dy**2
                 self.weights[i][j] = np.exp(-dist_squared / (2 * sigma**2))
         self.weights /= np.sum(self.weights) 
-
-    # def predict(self, mu, dt):
-    #     new_weights = np.zeros_like(self.weights) 
-    #     for i in range(self.grid_height):
-    #         for j in range(self.grid_width):
-    #             x_hat_curr = self.centers[i, j]
-    #             total_flow = 0
-    #             motion_radius = int(np.linalg.norm(mu) * dt / self.res) + 1
-    #             for di in range(-motion_radius, motion_radius + 1):
-    #                 for dj in range(-motion_radius, motion_radius + 1):
-    #                     k = i + di
-    #                     l = j + dj
-    #                     if 0 <= k < self.grid_height and 0 <= l < self.grid_width:
-    #                         # compute a weighted "flow" into the current grid cell
-    #                         x_hat_flow = self.centers[k, l]
-    #                         total_flow += self.weights[k][l] * self.compute_prior(x_hat_curr, x_hat_flow, mu, dt)
-    #             new_weights[i][j] = total_flow
-    #     self.weights = new_weights
 
     def predict(self, mu, dt):
         self.weights = predict_jit(self.weights, self.centers, mu, dt, self.res)

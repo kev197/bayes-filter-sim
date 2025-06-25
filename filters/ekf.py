@@ -12,21 +12,27 @@ class EKF:
     def predict(self, mu, dt):
         # x = x_0 + v_x*dt + noise
         # y = y_0 + v_y*dt + noise
-        alpha = 0.75
-        mu = mu * alpha
-        self.state[0] += mu[0] * dt
-        self.state[1] += mu[1] * dt
+        alpha = 1.3
+        self.state[0] += mu[0] * dt * alpha
+        self.state[1] += mu[1] * dt * alpha
 
         # propagate covariance matrix through uncertainty of prior 
         # Q + FPF^T
-        a = 7
-        b = 2
-        scale_process_noise = 5.0
-        var_alpha = (a * b) / ((a + b) ** 2 * (a + b + 1))
-        q_x = var_alpha * (mu[0] * dt)**2
-        q_y = var_alpha * (mu[1] * dt)**2
-        Q = scale_process_noise * np.array([[q_x, 0],
-                     [0, q_y]])
+
+        # (following alpha scaling of velocity, variance of the beta)
+        # a = 50
+        # b = 2
+        # scale_process_noise = 5.0
+        # var_alpha = (a * b) / ((a + b) ** 2 * (a + b + 1))
+        # q_x = var_alpha * (mu[0] * dt)**2
+        # q_y = var_alpha * (mu[1] * dt)**2
+        # Q = scale_process_noise * np.array([[q_x, 0],
+        #              [0, q_y]])
+
+        process_std = 4.0  # adjust based on expected actuator noise
+        q = process_std ** 2
+        Q = np.array([[q, 0],
+                    [0, q]])
         F = np.eye(2)
         self.covariance = Q + F @ self.covariance @ F.T
 

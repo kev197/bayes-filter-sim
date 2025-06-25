@@ -11,6 +11,14 @@ from sim.world import World
 import matplotlib.pyplot as plt
 import time
 
+def draw_glow(surface, x, y, color, max_radius=20, steps=6):
+    r, g, b = color
+    for i in range(steps):
+        alpha = int(255 * (1 - i / steps) * 0.3)  # decreasing alpha
+        radius = int(max_radius * (i + 1) / steps)
+        glow_color = (r, g, b, alpha)
+        pygame.draw.circle(surface, glow_color, (x, y), radius)
+
 # --- Pygame Setup ---
 pygame.init()
 WIDTH, HEIGHT = 1200, 800
@@ -38,16 +46,16 @@ frame_rate = 60
 # run at 20 hz, 50ms time steps
 filter_interval = 18
 # number of particles
-N_s = 200
+N_s = 150
 sensor_noise = 20.0
 # for manual control
-speed = 12
-num_beacons = 1
+speed = 8
+num_beacons = 3
 # manual input or not
-manual_control = False
+manual_control = True
 # initial state of mu (if using nonmanual)
-initial_vx = random.gauss(2000, 200)
-initial_vy = random.gauss(2000, 200)
+initial_vx = random.gauss(660, 40)
+initial_vy = random.gauss(660, 40)
 mu = np.array([initial_vx, initial_vy])
 grid_resolution = 20
 
@@ -63,6 +71,7 @@ ekf_mean = pygame.Rect(agent.rect.x, agent.rect.y, 5, 5)
 error_list_ekf = list()
 error_list_agf = list()
 error_list_pf = list()
+error_list_true = list()
 
 clock = pygame.time.Clock()
 last_update = 0
@@ -70,7 +79,7 @@ running = True
 
 # track time steps
 k = 0
-T = 400
+T = 1e100
 
 while running:
     clock.tick(frame_rate)
@@ -89,7 +98,7 @@ while running:
 
     # this is for manual control of the system
     keys = pygame.key.get_pressed()
-    mu = agent.move(keys, world, mu, manual_control=manual_control)
+    mu, no_error_state = agent.move(keys, world, mu, manual_control=manual_control)
 
     # Draw environment
     world.draw(win, colors)
@@ -127,7 +136,7 @@ while running:
         print(f"EKF: {ekf_time*1000:.2f}ms | PF: {pf_time*1000:.2f}ms | Grid: {agf_time*1000:.2f}ms")
 
         # We resample if it drops below a threshold N_T as degeneracy is high
-        N_T = N_s // 3
+        N_T = N_s // 2
         if pf.effective_sample_size() < N_T:
             pf.resample()
         
@@ -139,9 +148,11 @@ while running:
         error_ekf = np.linalg.norm(ground_truth - ekf_predicted_state)
         error_agf = np.linalg.norm(ground_truth - agf_predicted_state)
         error_pf = np.linalg.norm(ground_truth - pf_predicted_state)
+        error_true = np.linalg.norm(ground_truth - np.array([no_error_state.x, no_error_state.y]))
         error_list_ekf.append(error_ekf)
         error_list_agf.append(error_agf)
         error_list_pf.append(error_pf)
+        error_list_true.append(error_true)
 
     glow_surface.fill((0, 0, 0, 0))
 
@@ -204,6 +215,9 @@ while running:
     if num_beacons == 3:
         pygame.draw.line(glow_surface, (0, 150, 255, 80), world.beacons[1], true_pos, width=4)
         pygame.draw.line(glow_surface, (0, 150, 255, 80), world.beacons[2], true_pos, width=4)
+    
+    pygame.draw.circle(win, (255, 215, 0), no_error_state.center, 10)
+    draw_glow(glow_surface, no_error_state.centerx, no_error_state.centery, (255, 215, 0))
 
     win.blit(glow_surface, (0, 0))
 
@@ -220,6 +234,7 @@ timesteps = list(range(len(error_list_ekf)))
 plt.plot(timesteps, error_list_ekf, label='extended kalman filter')
 plt.plot(timesteps, error_list_pf, label='bootstrap particle filter')
 plt.plot(timesteps, error_list_agf, label='grid-based filter')
+plt.plot(timesteps, error_list_true, label='unaltered state (no filter)')
 
 def compute_rmse(errors):
     return np.sqrt(np.mean(np.square(errors)))
@@ -227,12 +242,14 @@ def compute_rmse(errors):
 rmse_ekf = compute_rmse(error_list_ekf)
 rmse_pf = compute_rmse(error_list_pf)
 rmse_agf = compute_rmse(error_list_agf)
+rmse_true = compute_rmse(error_list_true)
 
 rmse_text = (
     "RMSE: \n"
     f"EKF  : {rmse_ekf:.2f}\n"
     f"PF   : {rmse_pf:.2f}\n"
-    f"Grid : {rmse_agf:.2f}"
+    f"Grid : {rmse_agf:.2f}\n"
+    f"Unaltered : {rmse_true:.2f}"
 )
 
 plt.gca().text(
