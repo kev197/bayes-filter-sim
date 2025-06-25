@@ -67,8 +67,7 @@ The particles are distributed uniformly across the screen.
 
 <img src="https://github.com/user-attachments/assets/8662d259-0744-4585-8086-7bfcdd2b841e" alt="image" width="400"/>
 
-In an instant, the likelihood function adjust the weights of particles and the resampling process (I use systematic sampling) 
-causes the particles to "respawn" around these high density regions. Notice that the particles form a circle around the beacon, 
+The resampling process recursively converges the particles to high density regions. I use systematic sampling for this purpose, as it acts as a simple preventative measure to sample impoverishment (particles converge to the same state). Notice that the particles form a circle around the beacon, 
 expected behavior as the beacon only gives distance to the dot but not the orientation of the distance. 
 
 <img src="https://github.com/user-attachments/assets/e7d1fd58-81fd-44c2-a9bb-ef1e1138de4b" alt="image" width="400"/>
