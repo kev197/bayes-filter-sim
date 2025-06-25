@@ -5,7 +5,7 @@ Hello! This is a project I made that models various recursive filters in a discr
 ## Problem Statement
 The goal is to model the position of a dot on the screen who's true location is known with "uncertainty" (assuming a robotics application this 
 would be stuff like noise in the sensor data, inaccuracies in the hardware, wheel slippage ...). 
-The problem arises of estimating the state at a certain discrete time step
+The problem arises of estimating the state of the dot (or more generally, the system) at a certain discrete time step
 given the previous state (the properties of the system that we track) and new observations (sensors, external sources of observation). The goal of the recursive filter is at each time step to propagate the state at the previous time step through "system dynamics" (for example, velocity over
 time equations) to arrive at an estimated distribution of the system state called the prior, before modifying the prior with the latest observation 
 to attain a more promising prediction. This is the posterior of the system, given as a conditional distribution of the current system state given 
