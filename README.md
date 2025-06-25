@@ -59,10 +59,7 @@ We can also choose to refine the size of how we divide the state space, i.e. inc
 
 
 ### Particle Filter
-The particle filter is a special type of recursive filter that attempts to model the posterior with discrete spikes called particles in a Monte Carlo fashion. Each 
-particle has an importance weight, which is just a fancy term for the probability of the system having the particular state of the particle. 
-We sample new particle states from the importance distribution that makes a best guess then provide corrections to the corresponding weight with a ratio between an evaluation
-of the posterior (or a function similar up to proportionality) over the importance density with the sampled particle, previous particle state, and new sensor data as inputs. 
+The particle filter is a special type of recursive filter that attempts to approximate the posterior with discrete spike "particles" using monte carlo methods. The particles have attached weights, giving the evaluation of the approximated distribution at the state of the particle. In essence, we're throwing guesses at a distribution and weighing the good guesses, which when we add more particles should better model that distribution. At each recursive step we sample new particle states from the old ones stochastically using the "importance distribution", then reflect the change in certainty by adjusting the corresponding weight with a ratio between an evaluation of the new prediction on a posterior-like distribution (similar up to proportionality) divided by the evaluation of the prediction on the importance density. The reason we use this ratio is particular: Particles that move to places that better model the true posterior should receive more presence in the distribution, but we don't want to "oversample" regions that we draw from as the importance may not perfectly reflect the posterior. 
 
 <img src="https://github.com/user-attachments/assets/017e958b-6f67-4230-9afa-0b6751cc9370" alt="image" width="400"/>
 
