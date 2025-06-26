@@ -25,7 +25,7 @@ to the state estimation problem.
       - Compute bayesian fusion and generate a noise-dependent confidence scaling using linear algebra machinery 
   - Particle Filter
       - Motion model as the importance distribution (prior proposal)
-      - Systematically resample upon approximated effective sample size reaching a certain threshold
+      - Systematic resampling when approximated effective sample size reaches a certain threshold
   - Approximated Grid-Based Filter
       - Approximate (more or less) continuous pixel values as a discretized finite set of states, then apply the optimal bayesian update rules
    
