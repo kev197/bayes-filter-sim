@@ -96,7 +96,12 @@ Alternatively, the user can run benchmark_filters.py to run monte carlo iteratio
 
 <img src="https://github.com/user-attachments/assets/d153f6f1-a894-42ac-bb37-fba076d51799" alt="image" width="400"/>
 
-T = 300, resample at every time step, 30px grid resolution, 1 beacon
+T = 30
+120 particles
+resampling particles at every time step
+30px grid resolution
+1 beacon
+30px beacon noise
 
 
 
