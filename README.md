@@ -29,7 +29,7 @@ to the state estimation problem.
   - Approximated Grid-Based Filter
       - Approximate (more or less) continuous pixel values as a discretized finite set of states, then apply the optimal bayesian update rules
    
-### Extended Kalman Filter
+## Extended Kalman Filter
 The extended kalman filter is a generalization of the kalman filter algorithm to nonlinear state transition and observation models. However, we maintain the assumptions of gaussianity, so the only real benefit is being able to generalize KF to more models. At each time step the extended kalman filter maintains a "best guess" mean and a covariance that delineates a "cloud" of uncertainty around that mean. We can think of it like a normal distribution but generalized to the multidimensional state space, where we hope to "capture" the true state within this multidimensional cloud of certainty. The methods we use to propagate this mean and uncertainty around that mean is more complex, making use of linear algebra and vector calculus topics. In essence, we are propagating the previous posterior's gaussian through the mechanics of bayesian fusion and add dictate the amount of "fusion" with the Kalman Control, a deterministic formula that uses mappings between spaces to compute a relative confidence in what the sensors are telling us. Actually, everything I've stated prior to this is basically just Kalman Filter, the main difference in the "extended" variation is that we derive a first order taylor approximation of the nonlinear models by calculating the jacobian (generalized derivative) at the prior. This allows us to run the kalman filter updates without changing any formulas as we now have linear approximations of our models. 
 
 <img src="https://github.com/user-attachments/assets/0854ac74-3db7-452f-a84d-316f9633de64" alt="image" width="400"/>
@@ -41,7 +41,7 @@ The blue dot is the mean of the gaussian posterior predicted by the EKF. The tra
 As expected, increasing the number of sensors increases the precision of the posterior and the accuracy in general. This is the core of bayesian fusion; When we have multiple distributions "agreeing" on a certain point, the uncertainty of the new distribution dramatically decreases. 
 
 
-### Grid Filter
+## Grid Filter
 The grid based filter solves the problem of tractability, meaning feasability to compute, of the theoretical recursive filter. For example, the Chapman-Kolmogorov equation is the idealized way to calculate the prior distribution given the observation and state at the previous time step. However, because this equation takes an integral, we say that is intractable and thus we must compute something "like" that equation, or at least follow the general principles of the optimal filter when pushing along new posteriors. The grid filter basically says rather than taking an integral over all the possible states, which is practically infeasible with continuous values as is usually the case in real applications, let's discretize the state space into a finite set of states and perform the Chapman-Kolmogorov but as a sum over these states. Specified to this simulation, that means taking the state space (which is just x and y pixel coordinates) and chunking it up into discrete, finite cells. Then, we can perform the exact recursive filter updates on the "center" of each state. Of course, this comes with a few problems: The division of the state space must be sufficiently "dense" to model its continuous nature, but in nontrivial cases this comes at tremendous computational cost. This is because in complex problems (high dimensional state spaces, dense representations of the state space) the computation required grows exponentially. For example, the generalized Chapman-Kolmogorov equation to sums takes an overall "flow" into each state from every other state. This means iterating through every state, then deriving a probability of entering that state from every other state. In this simulation this means iterating through all n^2 grid cells and within each iteration iterating through n^2 grid cells, a terrible time complexity of n^4. In fact, when making this simulation it would not even function with cells of size 50px (for reference, the width of the simulation is 1200px) and external optimizations were necessary for the grid filter to even be useable (numba optimizations). Hence, this mode of filtering should only be used for very simple applications or teaching purposes. For practical usage other methods should be used. 
 
 <img src="https://github.com/user-attachments/assets/0309651a-20cb-4812-8d8c-9797610e2785" alt="image" width="400"/>
@@ -58,7 +58,7 @@ We can also choose to refine the size of how we divide the state space, i.e. inc
 
 
 
-### Particle Filter
+## Particle Filter
 The particle filter is a type of recursive filter that attempts to approximate the posterior with discrete spiked "particles" using monte carlo methods. The particles have attached weights, giving the evaluation of the approximated distribution at the state of the particle. In essence, we're throwing guesses at a distribution and weighing them, which as the number of particles tends to infinity should accurately model that distribution. At each recursive step we sample new particle states from the old ones stochastically using the "importance distribution", then reflect the change in certainty by adjusting the corresponding weight with a ratio between an evaluation of the new prediction on a posterior-proportional distribution (similar up to proportionality) divided by the evaluation of the prediction on the importance density. The reason we use this ratio is particular: Particles that move to places that better model the true posterior should receive more presence in the distribution, but we don't want to "oversample" regions that we draw from as the importance may not perfectly reflect the posterior. This type of filter is advantageous because it allows us to propagate the posterior through complex (non-gaussian, non-linear) models without ever losing its characteristics. Thus, we can reflect an approximated posterior without oversimplifying to a simple gaussian and relying on local linearizations of non-linear models as in the extended kalman filter, while also dramatically reducing time complexity from exponential in grid based filters to linear time as we simply propagate each particle state and weight independently. In general, for cases of non-Gaussian and non-linear based tracking with computational limits we should rely on particle filters, excluding the specific cases. 
 
 <img src="https://github.com/user-attachments/assets/017e958b-6f67-4230-9afa-0b6751cc9370" alt="image" width="400"/>
@@ -129,9 +129,9 @@ Overall, the PF generally performs better than the others. However, we note that
 - Benchmarking a regularized PF
 - Adding a different observation source 
 
-### About This Project
+## About This Project
 
 This is a personal project made during Summer of 2025 developed by me, a rising sophomore studying computer science and mathematics at Rutgers University.
 
-### References
+## References
 - Arulampalam, M. S., Maskell, S., Gordon, N., & Clapp, T. (2002). A tutorial on particle filters for online nonlinear/non-Gaussian Bayesian tracking. IEEE Transactions on Signal Processing, 50(2), 174–188.
