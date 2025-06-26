@@ -92,6 +92,8 @@ When the time step exceeds a given threshold T the program terminates and displa
 
 T = 500, resample at ~50% effective particles, 12px grid resolution, non-manual control, 2 beacons
 
+Alternatively, the user can run benchmark_filters.py to run monte carlo iterations of the program a specified number of times. This will not display the simulation, but at the end will give a box plot showing box plots for each filter representing the RMSEs over each run. 
+
 ![image](https://github.com/user-attachments/assets/60296e35-049b-4dfb-b761-23c7a23ecdbb)
 
 
