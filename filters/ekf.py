@@ -12,7 +12,7 @@ class EKF:
     def predict(self, mu, dt):
         # x = x_0 + v_x*dt + noise
         # y = y_0 + v_y*dt + noise
-        alpha = 1.3
+        alpha = 0.75
         self.state[0] += mu[0] * dt * alpha
         self.state[1] += mu[1] * dt * alpha
 

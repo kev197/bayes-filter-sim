@@ -18,7 +18,7 @@ class Agent:
         self.WIDTH = WIDTH
         self.HEIGHT = HEIGHT
 
-    def move(self, keys, world, mu, manual_control):
+    def move(self, keys, world, mu, dt, manual_control):
         if manual_control is True:
             no_error_state = self.no_error_rect
 
@@ -32,7 +32,6 @@ class Agent:
             ou_noise = random.gauss(0, 1)
             theta = 0.0001
             sigma = 10.0
-            dt = 1 / self.frame_rate
             self.ou_x = -theta * self.ou_x * dt + sigma * math.sqrt(dt) * ou_noise
             self.ou_y = -theta * self.ou_y * dt + sigma * math.sqrt(dt) * ou_noise
             
@@ -86,54 +85,56 @@ class Agent:
             no_error_state = self.no_error_rect
 
             # general error in the system dynamics
-            motion_uncertainty = random.betavariate(15, 2)
+            motion_uncertainty = random.betavariate(3, 2)
 
             # ornstein-uhlenbeck process for "dead reckoning"
             ou_noise = random.gauss(0, 1)
-            theta = 0.0001
-            sigma = 8.0
-            dt = 1 / self.frame_rate
+            theta = 0.00001
+            sigma = 500.0
             self.ou_x = -theta * self.ou_x * dt + sigma * math.sqrt(dt) * ou_noise
             self.ou_y = -theta * self.ou_y * dt + sigma * math.sqrt(dt) * ou_noise
             
             # extra noise (bumpiness or something)
-            minor_uncertainty_x = random.gauss(0, 1)
-            minor_uncertainty_y = random.gauss(0, 1)
+            minor_uncertainty_x = random.gauss(0, 10)
+            minor_uncertainty_y = random.gauss(0, 10)
 
             # --- Try moving X axis ---
             x_rect = self.rect.copy()
-            x_rect.x += (mu[0] / self.frame_rate) * motion_uncertainty + min(0, self.ou_x) + minor_uncertainty_x
-            no_error_state.x += (mu[0] / self.frame_rate)
+            x_rect.x += (mu[0] * motion_uncertainty + min(0, self.ou_x) + minor_uncertainty_x) * dt
+            no_error_state.x += mu[0] * dt
 
             within_bounds_x = 0 <= x_rect.left and x_rect.right <= self.WIDTH
             collision_x = world.collision(x_rect)
             if within_bounds_x and not collision_x:
                 self.rect.x = x_rect.x
             else:
-                stochastic_x = random.gauss(1, 0.01)
-                no_error_state.x -= (mu[0] / self.frame_rate)
+                stochastic_x = random.gauss(1, 0.05)
+                no_error_state.x -= mu[0] * dt
                 mu[0] = mu[0] * -1.0 * stochastic_x
-                self.rect.x += (mu[0] / self.frame_rate) * motion_uncertainty + min(0, self.ou_x) + minor_uncertainty_x
-                no_error_state.x += (mu[0] / self.frame_rate)
+                self.rect.x += (mu[0] * motion_uncertainty + min(0, self.ou_x) + minor_uncertainty_x) * dt
+                no_error_state.x += mu[0] * dt
                 
 
             # --- Try moving Y axis ---
             y_rect = self.rect.copy()
-            y_rect.y += (mu[1] / self.frame_rate) * motion_uncertainty + min(0, self.ou_y) + minor_uncertainty_y
-            no_error_state.y += (mu[1] / self.frame_rate)
+            y_rect.y += (mu[1] * motion_uncertainty + min(0, self.ou_y) + minor_uncertainty_y) * dt
+            no_error_state.y += mu[1] * dt
 
             within_bounds_y = 0 <= y_rect.top and y_rect.bottom <= self.HEIGHT
             collision_y = world.collision(y_rect)
             if within_bounds_y and not collision_y:
                 self.rect.y = y_rect.y
             else:
-                stochastic_y = random.gauss(1, 0.01)
-                no_error_state.y -= (mu[1] / self.frame_rate)
+                stochastic_y = random.gauss(1, 0.05)
+                no_error_state.y -= mu[1] * dt
                 mu[1] = mu[1] * -1.0 * stochastic_y
-                self.rect.y += (mu[1] / self.frame_rate) * motion_uncertainty + min(0, self.ou_y) + minor_uncertainty_y
-                no_error_state.y += (mu[1] / self.frame_rate)
+                self.rect.y += (mu[1] * motion_uncertainty + min(0, self.ou_y) + minor_uncertainty_y) * dt
+                no_error_state.y += mu[1] * dt
 
-            return mu, no_error_state
+            return mu, no_error_state.center
 
     def get_position(self):
         return np.array([self.rect.x, self.rect.y])
+    
+    def get_rect(self):
+        return self.rect

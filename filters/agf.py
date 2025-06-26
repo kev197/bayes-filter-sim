@@ -5,7 +5,7 @@ from numba import njit
 # use numba speed up because of high computational load of grid based filter. 
 
 @njit
-def compute_prior(curr_x, curr_y, flow_x, flow_y, mu_x, mu_y, dt, sigma=12, alpha=1.3):
+def compute_prior(curr_x, curr_y, flow_x, flow_y, mu_x, mu_y, dt, sigma=15, alpha=0.75):
     expected_x = flow_x + alpha * mu_x * dt
     expected_y = flow_y + alpha * mu_y * dt
     dx = curr_x - expected_x

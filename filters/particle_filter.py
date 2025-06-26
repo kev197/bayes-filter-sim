@@ -23,7 +23,7 @@ class ParticleFilter:
         # I need to come up with an importance density. 
         # I will use the prior for this task (bootstrap filter). 
         for p in self.particles:
-            motion_uncertainty_predict = 1.3
+            motion_uncertainty_predict = random.betavariate(5, 2)
             angle = random.uniform(0, 2 * math.pi)
             r = random.gauss(0.0, 8.0)
             # x = x_0 + v_x*dt + noise
