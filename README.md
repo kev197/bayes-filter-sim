@@ -124,6 +124,10 @@ AGF RMSE:
 
 Overall, the PF generally performs better than the others. However, we note that the EKF is actually quite strong considering its computational efficiency. One reason for this is that I performed the runs with a singular sensor, so the likelihood distribution formed a sort of "circle" dictated by the distance of the dot from the beacon. As a result, the distributions of the PF and AGF contorted to better model this shape (multimodal, uniform), which may have caused a deviation in their weighted averages from the ground truth as a singular point cannot fully capture these more complex distributions. This is fundamentally different than the EKF, which simply tracked a gaussian with a singular state mean and covariance. Furthermore, since I initially centered the EKF posterior on the true dot state it had no trouble with initially converging, which it may have struggled with without such knowledge. 
 
+Future improvements include:
+- Implementing ASIR, or using more optimal importance densities
+- Benchmarking a regularized PF
+- Adding a different observation source 
 
 ### About This Project
 
