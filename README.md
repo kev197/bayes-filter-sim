@@ -100,7 +100,7 @@ This was a 100 run monte carlo with the following parameters for reproducibility
 - resampling at every time step
 - 30px grid resolution
 - 1 beacon
-- 30px beacon noise
+- 30px standard deviation beacon noise
 
 The overall stats are as follows:
 
