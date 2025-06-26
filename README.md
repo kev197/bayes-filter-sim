@@ -90,17 +90,37 @@ When the time step exceeds a given threshold T the program terminates and displa
 
 <img src="https://github.com/user-attachments/assets/f51a4f61-eae3-4796-a1d6-78f64bea318e" alt="image" width="400"/>
 
-Alternatively, the user can run benchmark_filters.py to run monte carlo iterations of the program a specified number of times. This will not display the simulation, but at the end will give a box plot showing box plots for each filter representing the RMSEs over each run. 
+Alternatively, the user can run benchmark_filters.py to run monte carlo iterations of the program a specified number of times. This will not display the simulation, but at the end will show the box plots for each filter representing the RMSEs over each run, as well as print the stats for each filter's box plot to the console. 
 
 <img src="https://github.com/user-attachments/assets/d153f6f1-a894-42ac-bb37-fba076d51799" alt="image" width="400"/>
 
 This was a 100 run monte carlo with the following parameters for reproducibility:
-T = 30
-120 particles
-resampling particles at every time step
-30px grid resolution
-1 beacon
-30px beacon noise
+- T = 30
+- 120 particles
+- resampling at every time step
+- 30px grid resolution
+- 1 beacon
+- 30px beacon noise
+
+The overall stats are as follows:
+
+EKF RMSE:
+  Mean     : 76.682
+  Std Dev  : 40.511
+  Min      : 23.117
+  Max      : 310.686
+
+PF RMSE:
+  Mean     : 66.479
+  Std Dev  : 30.238
+  Min      : 33.873
+  Max      : 246.503
+
+AGF RMSE:
+  Mean     : 77.634
+  Std Dev  : 42.390
+  Min      : 40.798
+  Max      : 368.238
 
 
 
