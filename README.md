@@ -88,6 +88,10 @@ We can choose to increase the number of particles at the cost of computational r
 
 When the time step exceeds a given threshold T the program terminates and displays a matplotlib plot. The metric I use is RMSE (Root Mean Squared Error). To calculate this I let the true position of the dot be the actual state and for the predicted state I use various methods depending on the filter. For EKF, I just used the mean. For the PF, I take the expected x and y across all particles. For the GF, I take the expected x and y across the centers of all grid cells. 
 
+<img src="https://github.com/user-attachments/assets/f51a4f61-eae3-4796-a1d6-78f64bea318e" alt="image" width="400"/>
+
+T = 500, resample at ~50% effective particles, 12px grid resolution, non-manual control, 2 beacons
+
 ![image](https://github.com/user-attachments/assets/60296e35-049b-4dfb-b761-23c7a23ecdbb)
 
 
