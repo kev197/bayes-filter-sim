@@ -9,7 +9,7 @@ The problem arises of estimating the state of the dot (or more generally, the sy
 given the previous state and new observations on the environment. The goal of the recursive filter is at each time step to propagate the state at the previous time step through system dynamics (i.e. equations modeling changes in the system's state) to arrive at an estimated distribution of the system state called the prior, then modifying the prior with the latest observation 
 to attain a more promising prediction. This modified prediction is the posterior of the system, given as a conditional distribution of the current system state given 
 the set of all observations up to time step k. By the discrete time step nature of the problem, the observations and states are random processes
-consisting of sets of random vectors indexed by time. The special property of these recursive systems is that we are recursively generating the random vector denoting the state at each time step k using only the previous state vector and a new observation vector - 
+consisting of sets of random vectors indexed by time. The special property of these recursive systems is that we are generating the random vector denoting the state at each time step k using only the previous state vector and a new observation vector - 
 that is, we only need information of the previous time step and current data to arrive at the new result. Thus, these algorithms are a very efficient and elegant solution 
 to the state estimation problem. 
 
