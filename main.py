@@ -83,7 +83,7 @@ def run_simulation(render_sim, T, seed = None):
     initial_velocity = random.gauss(1000, 500)
     angle = random.uniform(0, 2 * math.pi)
     mu = np.array([initial_velocity * math.cos(angle), initial_velocity * math.sin(angle)])
-    grid_resolution = 30
+    grid_resolution = 15
 
     # Initialize world, agent, filter
     world = World(WIDTH, HEIGHT, num_beacons)
