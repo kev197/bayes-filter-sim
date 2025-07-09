@@ -90,7 +90,7 @@ When the time step exceeds a given threshold T the program terminates and displa
 
 <img src="https://github.com/user-attachments/assets/f51a4f61-eae3-4796-a1d6-78f64bea318e" alt="image" width="400"/>
 
-Alternatively, the user can run benchmark_filters.py to run monte carlo iterations of the program a specified number of times. This will not display the simulation, but at the end will show the box plots for each filter representing the RMSEs over each run, as well as print the stats for each filter's box plot to the console. 
+Alternatively, the user can run benchmark_filters.py to run monte carlo iterations of the program a specified number of times. This will not display the simulation, but at the end will show box plots representing the RMSEs for each filter over all the runs, as well as print the stats for each filter's box plot to the console. 
 
 <img src="https://github.com/user-attachments/assets/d153f6f1-a894-42ac-bb37-fba076d51799" alt="image" width="400"/>
 
