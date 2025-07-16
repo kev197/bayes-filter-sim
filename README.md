@@ -1,4 +1,4 @@
-# bayesian-filter-sim
+# bayes-playground
 
 Hello! This is a project I made that models various recursive filters in a discrete time approach (extended kalman filter, SIS filter, approximated grid-based approach) within a 2d sim. This repository is meant as a brief overview of these methods for learners and people curious about state estimation in general. 
 
