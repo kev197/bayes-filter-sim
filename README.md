@@ -7,7 +7,7 @@ Hello! This is a project I made that models various recursive filters in a discr
   - Added ASIR PF to benchmarks and simulation
   - Refactored simulation to be more visually appealing
  
-<img width="791" height="492" alt="image" src="https://github.com/user-attachments/assets/608083fb-2c09-470a-82f0-efc3e7b23eda" />
+<img width="591" height="292" alt="image" src="https://github.com/user-attachments/assets/608083fb-2c09-470a-82f0-efc3e7b23eda" />
 
  
 ## How Do I Run It?
