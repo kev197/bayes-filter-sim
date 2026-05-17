@@ -6,6 +6,10 @@ Hello! This is a project I made that models various recursive filters in a discr
 - 5/17/26
   - Added ASIR PF to benchmarks and simulation
   - Refactored simulation to be more visually appealing
+ 
+## How Do I Run It?
+- main.py runs the visual simulation. Uncomment the last line to run.
+- benchmark_filters.py runs N simulations and displays a box plot at the end, showing average performance over all runs. 
 
 ## Problem Statement
 The goal is to model the position of a dot on the screen who's true location is known with "uncertainty" (assuming a robotics application this 
