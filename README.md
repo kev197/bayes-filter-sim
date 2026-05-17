@@ -2,6 +2,11 @@
 
 Hello! This is a project I made that models various recursive filters in a discrete time approach (extended kalman filter, SIS filter, approximated grid-based approach) within a 2d sim. This repository is meant as a brief overview of these methods for learners and people curious about state estimation in general. 
 
+## Updates as of 5/17/26
+- 5/17/26
+  - Added ASIR PF to benchmarks and simulation
+  - Refactored simulation to be more visually appealing
+
 ## Problem Statement
 The goal is to model the position of a dot on the screen who's true location is known with "uncertainty" (assuming a robotics application this 
 would be stuff like noise in the sensor data, inaccuracies in the hardware, wheel slippage ...). 
