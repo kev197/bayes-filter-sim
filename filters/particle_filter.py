@@ -20,10 +20,10 @@ class ParticleFilter:
         self.particles = [Particle(random.uniform(700 - deviation, 700 + deviation), random.uniform(250 - deviation, 250 + deviation), weight=1.0 / N_s) for _ in range(N_s)]
 
     def predict(self, mu, dt):
-        # I need to come up with an importance density. 
-        # I will use the prior for this task (bootstrap filter). 
+        # I need to come up with an importance density.
+        # I will use the prior for this task (bootstrap filter).
         for p in self.particles:
-            motion_uncertainty_predict = random.betavariate(5, 2)
+            motion_uncertainty_predict = random.betavariate(6, 2)  # mean = 0.75, matches EKF/AGF alpha
             angle = random.uniform(0, 2 * math.pi)
             r = random.gauss(0.0, 8.0)
             # x = x_0 + v_x*dt + noise
@@ -80,6 +80,6 @@ class ParticleFilter:
         return 1.0 / sum_sq_weights
 
     def get_estimated_state(self):
-        x = sum(p.x for p in self.particles) / self.N_s
-        y = sum(p.y for p in self.particles) / self.N_s
+        x = sum(p.x * p.weight for p in self.particles)
+        y = sum(p.y * p.weight for p in self.particles)
         return np.array([x, y])

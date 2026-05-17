@@ -80,27 +80,29 @@ class Agent:
             else:
                 mu[1] *= 0.1
 
-            return mu, no_error_state
+            return mu, no_error_state.center
         else:
             no_error_state = self.no_error_rect
+
+            # gravity — accelerates downward continuously (y increases downward in pygame)
+            gravity = 1600.0
+            mu[1] += gravity * dt
 
             # general error in the system dynamics
             motion_uncertainty = random.betavariate(3, 2)
 
-            # ornstein-uhlenbeck process for "dead reckoning"
-            ou_noise = random.gauss(0, 1)
-            theta = 0.00001
-            sigma = 500.0
-            self.ou_x = -theta * self.ou_x * dt + sigma * math.sqrt(dt) * ou_noise
-            self.ou_y = -theta * self.ou_y * dt + sigma * math.sqrt(dt) * ou_noise
-            
-            # extra noise (bumpiness or something)
-            minor_uncertainty_x = random.gauss(0, 10)
-            minor_uncertainty_y = random.gauss(0, 10)
+            # ornstein-uhlenbeck process for random direction drift
+            theta = 0.8
+            sigma = 280.0
+            self.ou_x = -theta * self.ou_x * dt + sigma * math.sqrt(dt) * random.gauss(0, 1)
+            self.ou_y = -theta * self.ou_y * dt + sigma * math.sqrt(dt) * random.gauss(0, 1)
+
+            minor_uncertainty_x = random.gauss(0, 5)
+            minor_uncertainty_y = random.gauss(0, 5)
 
             # --- Try moving X axis ---
             x_rect = self.rect.copy()
-            x_rect.x += (mu[0] * motion_uncertainty + min(0, self.ou_x) + minor_uncertainty_x) * dt
+            x_rect.x += (mu[0] * motion_uncertainty + self.ou_x + minor_uncertainty_x) * dt
             no_error_state.x += mu[0] * dt
 
             within_bounds_x = 0 <= x_rect.left and x_rect.right <= self.WIDTH
@@ -108,16 +110,18 @@ class Agent:
             if within_bounds_x and not collision_x:
                 self.rect.x = x_rect.x
             else:
-                stochastic_x = random.gauss(1, 0.05)
                 no_error_state.x -= mu[0] * dt
-                mu[0] = mu[0] * -1.0 * stochastic_x
-                self.rect.x += (mu[0] * motion_uncertainty + min(0, self.ou_x) + minor_uncertainty_x) * dt
+                mu[0] *= -1.0
+                speed = math.sqrt(mu[0] ** 2 + mu[1] ** 2)
+                new_angle = math.atan2(mu[1], mu[0]) + random.gauss(0, 0.18)
+                mu[0] = speed * math.cos(new_angle)
+                mu[1] = speed * math.sin(new_angle)
+                self.rect.x += (mu[0] * motion_uncertainty + self.ou_x + minor_uncertainty_x) * dt
                 no_error_state.x += mu[0] * dt
-                
 
             # --- Try moving Y axis ---
             y_rect = self.rect.copy()
-            y_rect.y += (mu[1] * motion_uncertainty + min(0, self.ou_y) + minor_uncertainty_y) * dt
+            y_rect.y += (mu[1] * motion_uncertainty + self.ou_y + minor_uncertainty_y) * dt
             no_error_state.y += mu[1] * dt
 
             within_bounds_y = 0 <= y_rect.top and y_rect.bottom <= self.HEIGHT
@@ -125,10 +129,13 @@ class Agent:
             if within_bounds_y and not collision_y:
                 self.rect.y = y_rect.y
             else:
-                stochastic_y = random.gauss(1, 0.05)
                 no_error_state.y -= mu[1] * dt
-                mu[1] = mu[1] * -1.0 * stochastic_y
-                self.rect.y += (mu[1] * motion_uncertainty + min(0, self.ou_y) + minor_uncertainty_y) * dt
+                mu[1] *= -1.0
+                speed = math.sqrt(mu[0] ** 2 + mu[1] ** 2)
+                new_angle = math.atan2(mu[1], mu[0]) + random.gauss(0, 0.18)
+                mu[0] = speed * math.cos(new_angle)
+                mu[1] = speed * math.sin(new_angle)
+                self.rect.y += (mu[1] * motion_uncertainty + self.ou_y + minor_uncertainty_y) * dt
                 no_error_state.y += mu[1] * dt
 
             return mu, no_error_state.center
