@@ -7,6 +7,9 @@ Hello! This is a project I made that models various recursive filters in a discr
   - Added ASIR PF to benchmarks and simulation
   - Refactored simulation to be more visually appealing
  
+<img width="791" height="492" alt="image" src="https://github.com/user-attachments/assets/608083fb-2c09-470a-82f0-efc3e7b23eda" />
+
+ 
 ## How Do I Run It?
 - main.py runs the visual simulation. Uncomment the last line to run.
 - benchmark_filters.py runs N simulations and displays a box plot at the end, showing average performance over all runs. 
